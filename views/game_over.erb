@@ -1,3 +1,7 @@
-<h3>Thanks for playing, ya jerk!</h3>
+<% if session[:player_cash] > 0 %>
+  <h3>Thanks for playing, ya jerk!</h3>
+<% else %>
+  <h3>Sorry, you're broke!</h3>
+<% end %>
 
 <a href="/new_player" class="btn btn-primary">Start Over</a>

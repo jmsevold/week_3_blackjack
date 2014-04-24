@@ -34,9 +34,6 @@ helpers do
   end
 
   def card_image(card) # takes array-based card ['S','10']
-    if card[0] == "hidden"
-      return "<img src='/images/cards/cover.jpg' class='card_image'>"
-    end
     suit = case card[0]
       when 'H' then 'hearts'
       when 'D' then 'diamonds'
@@ -57,21 +54,23 @@ helpers do
   end
 
   def winner!(msg)
+    session[:player_cash] += session[:player_bet]
     @play_again = true
     @show_hit_or_stay_buttons = false
-    @success = "<strong>#{session[:player_name]} wins!</strong> #{msg}"
+    @success = "<strong>#{session[:player_name]} wins $#{session[:player_bet]} and now has $#{session[:player_cash]}!</strong> #{msg}"
   end
 
   def loser!(msg)
+    session[:player_cash] -= session[:player_bet]
     @play_again = true
     @show_hit_or_stay_buttons = false
-    @error = "<strong>#{session[:player_name]} loses!</strong> #{msg}"
+    @error = "<strong>#{session[:player_name]} loses $#{session[:player_bet]} and now has $#{session[:player_cash]}!</strong> #{msg}"
   end
 
-  def tie(msg)
+  def tie!(msg)
     @play_again = true
     @show_hit_or_stay_buttons = false
-    @success =  "<strong>It's a tie</strong> #{msg}"
+    @success =  "<strong>It's a tie!</strong> #{msg}"
   end
 end 
 
@@ -89,6 +88,7 @@ get '/new_player' do
   erb :new_player
 end
 
+
 post '/new_player' do
   if params[:player_name].empty?
     @error = "Name is required"
@@ -98,11 +98,32 @@ post '/new_player' do
     halt erb(:new_player)
   end
   session[:player_name] = params[:player_name]
+  redirect '/bet'
+end
+
+get '/bet' do
+  session[:player_cash] = 500
+  erb :bet
+end
+
+post '/game/bet' do
+  session[:player_bet] = params[:player_bet].to_i
+  bet = params[:player_bet].to_i
+  if bet > session[:player_cash]
+    @error = "You cannot bet more money than you have!"
+    halt erb(:bet)
+  elsif bet == 0
+    @error = "Error: 0 entered as amount."
+    halt erb(:bet)
+  elsif bet < 0
+    @error = "You cannot bet less than zero."
+  end
   redirect '/game'
 end
 
-get '/game' do
 
+get '/game' do
+  
   session[:turn] = session[:player_name]
   # create deck & store in session
   suits = ['H', 'D', 'S', 'C']
@@ -184,5 +205,6 @@ end
 get '/game_over' do
   erb :game_over
 end
+
 
 
