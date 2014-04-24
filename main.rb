@@ -5,6 +5,7 @@ set :sessions, true
 
 BLACKJACK_AMOUNT = 21
 DEALER_MIN_HIT = 17
+INITIAL_BET = 500
 
 before do
   @show_hit_or_stay_buttons = true
@@ -85,6 +86,7 @@ get "/" do
 end
 
 get '/new_player' do
+  session[:player_cash] = INITIAL_BET
   erb :new_player
 end
 
@@ -102,7 +104,6 @@ post '/new_player' do
 end
 
 get '/bet' do
-  session[:player_cash] = 500
   erb :bet
 end
 
