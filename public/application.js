@@ -1,6 +1,5 @@
 $(document).ready(function() {
-  
-  $(document).on('click','#hit_form',function() {
+  $(document).on('click','form#hit_form input',function() {
     $.ajax({
       type: 'POST',
       url: '/game/player/hit'
@@ -14,7 +13,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
   
-  $(document).on('click','#stay_form',function() {
+  $(document).on('click','form#stay_form input',function() {
     $.ajax({
       type: 'POST',
       url: '/game/player/stay'
@@ -27,7 +26,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
   
-  $(document).on('click','#dealer_hit_form',function() {
+  $(document).on('click','form#dealer_hit_form input',function() {
     $.ajax({
       type: 'POST',
       url: '/game/dealer/hit'

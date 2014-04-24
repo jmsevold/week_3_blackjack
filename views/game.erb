@@ -1,4 +1,15 @@
-<div id="game"> 
+<div id="game">
+<div class="container">
+    <%if @loser %>
+      <div class="alert alert-error"><%=@loser%></div>
+    <% end %>
+
+    <%if @winner %>
+      <div class="alert alert-success"><%=@winner%></div>
+    <% end %>
+      
+  </div>
+  </body> 
   <h1>Blackjack!</h1>
 
   <p>Welcome <%= session[:player_name] %></p>
